@@ -6,7 +6,7 @@
 /*   By: htran-th <htran-th@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:02:41 by htran-th          #+#    #+#             */
-/*   Updated: 2024/05/27 19:28:24 by htran-th         ###   ########.fr       */
+/*   Updated: 2024/05/27 20:22:35 by htran-th         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static int ft_putnbr(int n)
             return (-1);
     return (count + temp);
 }
-static int ft_putaddress(unsigned long long int n)
+static int ft_putaddress_helper(unsigned long long int n)
 {
     int count;
     char *symbol;
@@ -113,10 +113,20 @@ static int ft_putaddress(unsigned long long int n)
         count += ft_putchar(symbol[n]);
     else
     {
-        count += ft_putaddress(n / 16);
+        count += ft_putaddress_helper(n / 16);
         count += ft_putchar(symbol[n % 16]);
     }
     return (count);
+}
+static int ft_putaddress(unsigned long long int n)
+{
+    int count;
+    
+    count = 0;
+    count = ft_putaddress_helper(n);
+    if (count == -1)
+        return (-1);
+    return (count + 2);
 }
 static unsigned int ft_putxnbr_uppercase(unsigned int n, unsigned int base)
 {
@@ -143,12 +153,8 @@ static unsigned int ft_putxnbr_uppercase(unsigned int n, unsigned int base)
     return (temp + count);
 }*/
 
-
 int ft_check_format(va_list args, char c)
 {
-    int count;
-    
-    count = 0;
     if (c == 'c')
         return (ft_putchar(va_arg(args, int)));
     else if (c == 's')
@@ -156,9 +162,8 @@ int ft_check_format(va_list args, char c)
     else if (c == 'p')
     {
         if (ft_putstr("0x") == -1)
-        return (-1);
-        count += ft_putaddress(va_arg(args, unsigned long long int));
-        return (count + 2);
+            return (-1);
+        return (ft_putaddress(va_arg(args, unsigned long long int)));
     }
     else if (c == 'd' || c == 'i')
         return (ft_putnbr(va_arg(args, int)));
@@ -225,9 +230,9 @@ int ft_printf(const char *format, ...)
     //printf("(Printf)%s\n", str);
 
     //Print an address
-    //char *str = "ABC";
-    //printf_count = ft_printf("%p\n", ULLONG_MAX);
-    //printf("(Printf)%p\n", ULLONG_MAX);
+    char *str = "ABC";
+    printf_count = ft_printf("%p\n", &str);
+    printf("(Printf)%p\n", &str);
 
     //Printf a decimal (base 10) number
     //int n = -2147483648;
