@@ -6,7 +6,7 @@
 /*   By: htran-th <htran-th@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:02:41 by htran-th          #+#    #+#             */
-/*   Updated: 2024/05/27 20:22:35 by htran-th         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:57:35 by htran-th         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,41 +175,38 @@ int ft_check_format(va_list args, char c)
         return (ft_putxnbr_uppercase((va_arg(args, unsigned int)), 16));
     else if (c == '%')
         return (ft_putchar('%'));
+    else if (c == '\0')
+        return (0);    
     else
         return (-1);
 }
 
 int ft_printf(const char *format, ...)
 {
-    int i;
     int count;
     int temp;
     va_list list;
     va_start (list, format);
     
-    i = 0;
     count = 0;
     temp = 0;
-    while (format[i] != '\0')
+    while (*format)
     {
-        if (format[i] == '%')
+        if (*format == '%')
         {
-            i++;
-            if (format[i] != '\0')
-            {
-                temp = ft_check_format(list, (format[i]));
-                if (temp == -1)
-                    return (-1);
-            }
+            temp = ft_check_format(list, *(++format));
+            if (temp == -1)
+                return (-1);
             count += temp;
         }
         else
         {
-            if (ft_putchar(format[i]) == -1)
+            if (ft_putchar(*format) == -1)
                 return (-1);
             count++;
         }
-        i++;
+        if (*format != '\0')
+            format++;
     }
     va_end(list);
     return (count);
@@ -218,21 +215,24 @@ int ft_printf(const char *format, ...)
 /*int main(void)
 {
     int printf_count;
+
+    printf_count = ft_printf("abc%");
+    printf("abc%");
     
     //Print a single character
-    //printf_count = ft_printf("hello %c\n", 'K');
+    //printf_count = ft_printf("%c\n", 'K');
     //printf("(Printf)%c\n", 'K');
     
     
     //Print a string of characters
     //char *str = "ABC";
-    ///printf_count = ft_printf("%s\n", str);
+    //printf_count = ft_printf("%s\n", str);
     //printf("(Printf)%s\n", str);
 
     //Print an address
-    char *str = "ABC";
-    printf_count = ft_printf("%p\n", &str);
-    printf("(Printf)%p\n", &str);
+    //char *str = "ABC";
+    //printf_count = ft_printf("%p\n", &str);
+    //printf("(Printf)%p\n", &str);
 
     //Printf a decimal (base 10) number
     //int n = -2147483648;
