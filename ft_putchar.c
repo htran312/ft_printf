@@ -6,16 +6,16 @@
 /*   By: htran-th <htran-th@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 21:47:41 by htran-th          #+#    #+#             */
-/*   Updated: 2024/05/27 16:10:09 by htran-th         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:46:04 by htran-th         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_putchar(char c)
+int	ft_putchar(char c)
 {
-    if (write(1, &c, 1) != 1)
-        return (-1);
-    else
-        return (1);
+	if (write(1, &c, 1) != 1)
+		return (-1);
+	else
+		return (1);
 }
